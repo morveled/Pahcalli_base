@@ -8,6 +8,7 @@ Este documento describe el modelo de dominio del sistema Pahcalli.
 classDiagram
     class Producto {
         -Long idProducto
+        -String codigo
         -String nombre
         -String descripcion
         -String contenido
@@ -70,6 +71,8 @@ classDiagram
         -Date fecha
         -Double precioTotal
         -Integer cantidadProductos
+        -List<DetalleVenta> detalles
+        -Boolean finalizada
     }
 
     class DetalleVenta {
@@ -122,6 +125,21 @@ classDiagram
     Producto "*" -- "1" Ingrediente : contiene
     Producto "*" -- "1" Laboratorio : fabricado por
     Usuario "1" -- "1" Empleado : tiene
+    
+    Empleado "*" -- "1" TipoEmpleado : es de tipo
+    Almacen "*" -- "1" Producto : almacena
+    Venta "*" -- "1" Empleado : realizada por
+    DetalleVenta "*" -- "1" Venta : pertenece a
+    DetalleVenta "*" -- "1" Producto : incluye
+    Sucursal "1" -- "1" Empleado : tiene gerente
+    Inventario "*" -- "1" Producto : contiene
+    Inventario "*" -- "1" Sucursal : pertenece a
+    Pedido "*" -- "1" Sucursal : realizado por
+    Pedido "*" -- "1" Empleado : registrado por
+    DetallePedido "*" -- "1" Pedido : pertenece a
+    DetallePedido "*" -- "1" Producto : incluye
+    Promocion "*" -- "1" Sucursal : aplica en
+    Promocion "*" -- "1" Producto : aplica a
 ```
 
 ## Descripción de Entidades
@@ -129,10 +147,15 @@ classDiagram
 ### Producto
 Representa un producto farmacéutico o medicamento en el sistema.
 - **idProducto**: Identificador único del producto
+- **codigo**: Código del producto
 - **nombre**: Nombre comercial del producto
+- **contenido**: Descripción detallada del producto
 - **descripcion**: Descripción detallada del producto
 - **precio**: Precio de venta del producto
-- **existencias**: Cantidad disponible en inventario
+- **receta**: Indica si el producto necesita receta para ser vendido
+- **categoria**: Categoría a la que pertenece el producto
+- **ingrediente**: Ingrediente principal del producto
+- **laboratorio**: Fabricante del producto
 
 ### CategoriaProducto
 Clasifica los productos en diferentes categorías.
