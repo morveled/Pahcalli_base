@@ -18,6 +18,7 @@ sequenceDiagram
     C ->> C: inicia()
     C ->> V: muestra()
     U ->> V: usuario, password
+    V ->> C: usuario, password
     C ->> S: login(usuario, password)
     S ->> UM: findByNombre(usuario)
     UM -->> R: findByNombre(usuario)
@@ -51,6 +52,7 @@ sequenceDiagram
     C ->> C: inicia()
     C ->> V: muestra()
     U ->> V: usuario, password, nEmpleado, nombre, apellidoP, apellidoM, email, telefono, tipo
+    V ->> C: usuario, password, nEmpleado, nombre, apellidoP, apellidoM, email, telefono, tipo
     C ->> S: nuevoUsuario(usuario, password, nEmpleado, nombre, apellidoP, apellidoM, email, telefono, tipo)
     S ->> EM: nuevoEmpleado(nEmpleado, nombre, apellidoP, apellidoM, email, telefono, tipo)
     EM ->> TM: findByNombre(tipo)
@@ -90,6 +92,7 @@ sequenceDiagram
     C ->> C: inicia()
     C ->> V: muestra()
     U ->> V: idUsuario, usuario, password, nEmpleado, nombre, apellidoP, apellidoM, email, telefono, tipo
+    V ->> C: idUsuario, usuario, password, nEmpleado, nombre, apellidoP, apellidoM, email, telefono, tipo
     C ->> S: nuevoUsuario(usuario, password, nEmpleado, nombre, apellidoP, apellidoM, email, telefono, tipo)
     S ->> UM: findByIdUsuario(idUsuario)
     UM ->> UR: findByIdUsuario(idUsuario)
@@ -110,3 +113,37 @@ sequenceDiagram
     S -->> C: idUsuario
     C -->> V: muestraResultado()
 ``` 
+
+## Eliminar Usuario
+```mermaid
+sequenceDiagram
+    box Presentación
+    actor U as Usuario
+    Participant V as VistaEliminarUsuario
+    Participant C as ControladorEliminarUsuario
+    end
+    box Capa de negocio
+    Participant S as ServicioUsuario
+    Participant UM as Usuario
+    Participant EM as Empleado
+    end 
+    box Datos
+    Participant UR as UsuarioRepository
+    Participant ER as EmpleadoRepository
+    end
+    C ->> C: inicia()
+    C ->> V: muestra()
+    U ->> V: idUsuario
+    V ->> C: idUsuario
+    C ->> S: deleteByIdUsuario(idUsuario)
+    S ->> EM: deleteByIdUsuario(idUsuario)
+    EM ->> ER: deleteByIdUsuario(idUsuario)
+    ER -->> EM: boolean
+    EM -->> S: boolean
+    S ->> UM: deleteByIdUsuario(idUsuario)
+    UM ->> UR: deleteByIdUsuario(idUsuario)
+    UR -->> UM: boolean
+    UM -->> S: boolean
+    S -->> C: boolean
+    C -->> V: muestraResultado()
+```
