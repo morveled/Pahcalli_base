@@ -17,30 +17,48 @@ classDiagram
         -Laboratorio laboratorio
         -CategoriaProducto categoria
         -Ingrediente ingrediente
-
+        +findByCodigo(codigo)
+        +getPrecio()
+        +getNombre()
+        +save()
+        +getById(idProducto)
     }
 
     class CategoriaProducto {
         -Long idCategoria
         -String nombre
         -String descripcion
+        +getALL()
+        +getById(idCategoria)
     }
 
     class Ingrediente {
         -Long idIngrediente
         -String nombre
         -String descripcion
+        +getALL()
+        +getById(idIngrediente)
     }
 
     class Laboratorio {
         -Long idLaboratorio
         -String nombre
+        +getALL()
+        +getById(idLaboratorio)
     }
 
     class Usuario {
         -Long idUsuario
         -String nombreUsuario
         -String password
+        -Empleado empleado
+        +findByNombre(nombre)
+        +login(password)
+        +nuevoUsuario(usuario, password, empleado)
+        +findByIdUsuario(idUsuario)
+        +update(usuario, password)
+        +save()
+        +update()
     }
 
     class Empleado {
@@ -52,13 +70,19 @@ classDiagram
         -String correoElectronico
         -String telefono
         -TipoEmpleado tipo
+        +nuevoEmpleado(nEmpleado, nombre, apellidoP, apellidoM, email, telefono, tipo)
+        +update(nEmpleado, nombre, apellidoP, apellidoM, email, telefono, tipo)
+        +save()
+        +update()
     }
 
     class TipoEmpleado {
         -Long idTipo
         -String nombre
+        +findByNombre(nombre)
+        +getById(idTipo)
     }
-    
+
     class Almacen {
         -Long idAlmacen
         -Producto producto
@@ -73,6 +97,10 @@ classDiagram
         -Integer cantidadProductos
         -List<DetalleVenta> detalles
         -Boolean finalizada
+        +nuevaVenta(idEmpleado, idSucursal)
+        +findByIdVenta(idVenta)
+        +agregarProducto(idProducto, cantidad)
+        +finalizarVenta()
     }
 
     class DetalleVenta {
@@ -81,6 +109,7 @@ classDiagram
         -Producto producto
         -Integer cantidad
         -Double precioUnitario
+        +nuevoDetalleVenta(idVenta, idProducto, cantidad)
     }
 
     class Sucursal {
@@ -89,6 +118,8 @@ classDiagram
         -String direccion
         -String telefono
         -Empleado gerente
+        +findBySucursalAndProducto(idSucursal, idProducto)
+        +reducirInventario(detalleVenta)
     }
 
     class Inventario {
@@ -96,6 +127,8 @@ classDiagram
         -Producto producto
         -Sucursal sucursal
         -Integer cantidad
+        +findBySucursalAndProducto(idSucursal, idProducto)
+        +reducirInventario(producto, cantidad)
     }
 
     class Pedido {
