@@ -32,5 +32,19 @@ public class ControlGestionarUsuarios {
     public void agregaUsuario(UsuarioTabla usuario) {
         ventanaGestionarUsuarios.agregaUsuarioATabla(usuario);
     }
-}
 
+    /**
+     * Lanza la ventana para editar un usuario existente.
+     */
+    public void editarUsuario(UsuarioTabla usuario, VentanaGestionarUsuarios ventana) {
+        VentanaEditarUsuario ventanaEditarUsuario = new VentanaEditarUsuario(ventana, usuario, this);
+        ventanaEditarUsuario.setVisible(true);
+    }
+
+    /**
+     * Recibe los cambios de un usuario editado y actualiza la tabla.
+     */
+    public void actualizarUsuario(UsuarioTabla usuario) {
+        ventanaGestionarUsuarios.actualizarUsuarioEnTabla(usuario);
+    }
+}
