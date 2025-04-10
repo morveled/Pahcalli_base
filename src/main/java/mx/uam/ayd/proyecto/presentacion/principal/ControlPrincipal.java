@@ -47,7 +47,7 @@ public class ControlPrincipal {
 	 * 
 	 */
 	public void agregarUsuario() {
-		controlAgregarUsuario.inicia();
+		// controlAgregarUsuario.inicia(); //
 	}
 	
 	/**

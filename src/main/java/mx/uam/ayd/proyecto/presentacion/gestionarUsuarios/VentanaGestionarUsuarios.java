@@ -1,43 +1,47 @@
 package mx.uam.ayd.proyecto.presentacion.gestionarUsuarios;
 
 import javax.swing.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import mx.uam.ayd.proyecto.presentacion.agregarUsuario.ControlAgregarUsuario;
+import java.util.List;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 
 @SuppressWarnings("serial")
 @Component
 public class VentanaGestionarUsuarios extends JFrame {
 
-    @Autowired
-    private ControlAgregarUsuario controlAgregarUsuario;
+    private ControlGestionarUsuarios controlGestionarUsuarios;
 
     private JLabel jLabel1;
     private JScrollPane jScrollPane1;
     private JTable jTable1;
     private JButton jButtonAgregar;
+    private DefaultTableModel modeloTabla;
+    private List<UsuarioTabla> listaUsuarios = new ArrayList<>();
 
     public VentanaGestionarUsuarios() {
-        jLabel1 = new JLabel("Gestión de usuarios");
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18));
 
-        jTable1 = new JTable(new javax.swing.table.DefaultTableModel(
-            new Object[][] {
-                {"", "", "", "", "", "", "", "", "Editar", "Eliminar"},
-                {"", "", "", "", "", "", "", "", "Editar", "Eliminar"},
-            },
+        jLabel1 = new JLabel();
+        jScrollPane1 = new JScrollPane();
+        jTable1 = new JTable();
+        jButtonAgregar = new JButton();
+
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18));
+        jLabel1.setText("Gestión de usuarios");
+
+        modeloTabla = new DefaultTableModel(
             new String[] {
                 "Número de empleado", "Nombre(s)", "Apellido(s)", "Contraseña", "Correo",
                 "Teléfono", "Puesto", "Sucursal", "Editar", "Eliminar"
-            }
-        ));
+            }, 0
+        );
+        jTable1.setModel(modeloTabla);
+        jScrollPane1.setViewportView(jTable1);
 
-        jScrollPane1 = new JScrollPane(jTable1);
-
-        jButtonAgregar = new JButton("Agregar nuevo usuario");
-        jButtonAgregar.addActionListener(evt -> {
-            controlAgregarUsuario.inicia(this); // Solo se pasaba this
-        });
+        jButtonAgregar.setText("Agregar nuevo usuario");
+        jButtonAgregar.addActionListener(evt -> controlGestionarUsuarios.lanzarVentanaAgregarUsuario());
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -59,11 +63,19 @@ public class VentanaGestionarUsuarios extends JFrame {
         );
 
         pack();
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // Centrar en pantalla
     }
 
     public void muestra() {
         setVisible(true);
+    }
+
+    public void setControl(ControlGestionarUsuarios control) {
+        this.controlGestionarUsuarios = control;
+    }
+
+    public void agregaUsuarioATabla(UsuarioTabla usuario) {
+        listaUsuarios.add(usuario);
+        modeloTabla.addRow(usuario.toRow());
     }
 }

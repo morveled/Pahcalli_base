@@ -77,5 +77,5 @@ public class ControlMenu {
     public void mostrarGestionUsuarios() {
         controlGestionarUsuarios.inicia();
     }
-    
+        
 }
