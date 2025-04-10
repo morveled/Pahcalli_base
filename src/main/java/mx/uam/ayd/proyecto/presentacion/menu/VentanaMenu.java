@@ -43,6 +43,12 @@ public class VentanaMenu extends javax.swing.JFrame {
             }
         });
         jButton3.setText("Gestión De Usuarios");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                controlMenu.mostrarGestionUsuarios();
+            }
+        });
+        
 
         jButton4.setText("Gestión De Promociones");
 

@@ -14,6 +14,8 @@ import mx.uam.ayd.proyecto.presentacion.gestionInventario.ControladorGestionInve
 import mx.uam.ayd.proyecto.presentacion.loggin.ControlLoggin;
 import mx.uam.ayd.proyecto.presentacion.mostrarInventario.ControladorMostrarInventario;
 import mx.uam.ayd.proyecto.presentacion.visualizarSolicitudesAbastecimiento.ControlVisualizarSolicitudesAbastecimiento;
+import mx.uam.ayd.proyecto.presentacion.gestionarUsuarios.ControlGestionarUsuarios;
+
 
 @Component
 public class ControlMenu {
@@ -26,6 +28,8 @@ public class ControlMenu {
     private ControladorMostrarInventario controladorMostrarInventario;  
     @Autowired
     private ControlVisualizarSolicitudesAbastecimiento controlSolicitudesAbastecimiento;
+    @Autowired
+    private ControlGestionarUsuarios controlGestionarUsuarios;
 
     private ControlLoggin controlLoggin;
 
@@ -69,4 +73,9 @@ public class ControlMenu {
         controlLoggin.inicia();
         ventanaMenu.dispose();
     }
+
+    public void mostrarGestionUsuarios() {
+        controlGestionarUsuarios.inicia();
+    }
+    
 }
