@@ -47,4 +47,9 @@ public class ControlGestionarUsuarios {
     public void actualizarUsuario(UsuarioTabla usuario) {
         ventanaGestionarUsuarios.actualizarUsuarioEnTabla(usuario);
     }
+
+    public void eliminarUsuario(UsuarioTabla usuario) {
+        ventanaGestionarUsuarios.eliminarUsuarioDeTabla(usuario);
+    }
+    
 }
