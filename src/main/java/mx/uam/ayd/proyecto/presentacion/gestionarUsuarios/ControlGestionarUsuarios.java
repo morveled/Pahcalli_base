@@ -1,8 +1,12 @@
 package mx.uam.ayd.proyecto.presentacion.gestionarUsuarios;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import mx.uam.ayd.proyecto.negocio.ServicioEmpleado;
+import mx.uam.ayd.proyecto.negocio.modelo.Empleado;
 import mx.uam.ayd.proyecto.presentacion.agregarUsuario.ControlAgregarUsuario;
 
 @Component
@@ -14,8 +18,29 @@ public class ControlGestionarUsuarios {
     @Autowired
     private ControlAgregarUsuario controlAgregarUsuario;
 
+    @Autowired
+    private ServicioEmpleado servicioEmpleado;
+
     public void inicia() {
         ventanaGestionarUsuarios.setControl(this);
+
+        List<Empleado> empleados = servicioEmpleado.getAll();
+
+        for (Empleado empleado : empleados) {
+            UsuarioTabla usuario = new UsuarioTabla(
+                empleado.getNumeroEmpleado(),
+                empleado.getNombre(),
+                (empleado.getApellidoPaterno() + " " + empleado.getApellidoMaterno()).trim(),
+                "", // contraseña no disponible desde la entidad Empleado
+                empleado.getCorreoElectronico(),
+                empleado.getTelefono(),
+                empleado.getTipo() != null ? empleado.getTipo().getNombre() : "",
+                empleado.getSucursal() != null ? empleado.getSucursal().getNombre() : ""
+            );
+
+            ventanaGestionarUsuarios.agregaUsuarioATabla(usuario);
+        }
+    
         ventanaGestionarUsuarios.muestra();
     }
 
