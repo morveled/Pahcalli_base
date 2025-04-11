@@ -1,6 +1,7 @@
 package mx.uam.ayd.proyecto.presentacion.gestionarUsuarios;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -84,9 +85,9 @@ public class ControlGestionarUsuarios {
         }
 
         // 3. Asignar Sucursal si existe
-        Sucursal sucursal = sucursalRepository.findByNombre(usuarioTabla.getSucursal());
-        if (sucursal != null) {
-            empleado.setSucursal(sucursal);
+        Optional<Sucursal> sucursalOpt = sucursalRepository.findByNombre(usuarioTabla.getSucursal());
+        if (sucursalOpt.isPresent()) {
+            empleado.setSucursal(sucursalOpt.get());
         }
 
         // 4. Guardar en base de datos
