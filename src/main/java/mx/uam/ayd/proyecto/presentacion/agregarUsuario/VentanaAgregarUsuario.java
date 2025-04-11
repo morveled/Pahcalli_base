@@ -3,8 +3,9 @@ package mx.uam.ayd.proyecto.presentacion.agregarUsuario;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.List;
 
+import mx.uam.ayd.proyecto.negocio.modelo.TipoEmpleado;
 import mx.uam.ayd.proyecto.presentacion.gestionarUsuarios.ControlGestionarUsuarios;
 import mx.uam.ayd.proyecto.presentacion.gestionarUsuarios.UsuarioTabla;
 
@@ -19,13 +20,13 @@ public class VentanaAgregarUsuario extends JDialog {
     private JTextField campoContrasena;
     private JTextField campoCorreo;
     private JTextField campoTelefono;
-    private JTextField campoPuesto;
+    private JComboBox<String> comboPuesto;
     private JTextField campoSucursal;
 
     private JButton botonCerrar;
     private JButton botonAgregar;
 
-    public VentanaAgregarUsuario(JFrame parent, ControlGestionarUsuarios control) {
+    public VentanaAgregarUsuario(JFrame parent, ControlGestionarUsuarios control, List<TipoEmpleado> tiposEmpleado) {
         super(parent, "Agregar nuevo usuario", true);
         this.controlGestionarUsuarios = control;
 
@@ -48,14 +49,13 @@ public class VentanaAgregarUsuario extends JDialog {
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.WEST;
 
-        // Campos
         campoNumeroEmpleado = addField("Número de empleado:", ++gbc.gridy, gbc);
         campoNombre = addField("Nombre(s):", ++gbc.gridy, gbc);
         campoApellido = addField("Apellido(s):", ++gbc.gridy, gbc);
         campoContrasena = addField("Contraseña:", ++gbc.gridy, gbc);
         campoCorreo = addField("Correo:", ++gbc.gridy, gbc);
         campoTelefono = addField("Teléfono:", ++gbc.gridy, gbc);
-        campoPuesto = addField("Puesto:", ++gbc.gridy, gbc);
+        comboPuesto = addComboBox("Puesto:", ++gbc.gridy, gbc, tiposEmpleado);
         campoSucursal = addField("Sucursal:", ++gbc.gridy, gbc);
 
         // Botones
@@ -68,26 +68,23 @@ public class VentanaAgregarUsuario extends JDialog {
         botonAgregar = new JButton("Agregar usuario");
         add(botonAgregar, gbc);
 
-        // Acciones
         botonCerrar.addActionListener(e -> dispose());
 
-        botonAgregar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                UsuarioTabla nuevoUsuario = new UsuarioTabla(
-                    campoNumeroEmpleado.getText(),
-                    campoNombre.getText(),
-                    campoApellido.getText(),
-                    campoContrasena.getText(),
-                    campoCorreo.getText(),
-                    campoTelefono.getText(),
-                    campoPuesto.getText(),
-                    campoSucursal.getText()
-                );
+        botonAgregar.addActionListener((ActionEvent e) -> {
+            UsuarioTabla nuevoUsuario = new UsuarioTabla(
+                campoNumeroEmpleado.getText(),
+                campoNombre.getText(),
+                campoApellido.getText(),
+                campoContrasena.getText(),
+                campoCorreo.getText(),
+                campoTelefono.getText(),
+                comboPuesto.getSelectedItem().toString(),
+                campoSucursal.getText()
+            );
 
-                controlGestionarUsuarios.agregaUsuario(nuevoUsuario);
-                JOptionPane.showMessageDialog(VentanaAgregarUsuario.this, "Usuario agregado exitosamente");
-                dispose();
-            }
+            controlGestionarUsuarios.agregaUsuario(nuevoUsuario);
+            JOptionPane.showMessageDialog(VentanaAgregarUsuario.this, "Usuario agregado exitosamente");
+            dispose();
         });
 
         setSize(500, 500);
@@ -103,5 +100,19 @@ public class VentanaAgregarUsuario extends JDialog {
         JTextField field = new JTextField(20);
         add(field, gbc);
         return field;
+    }
+
+    private JComboBox<String> addComboBox(String label, int y, GridBagConstraints gbc, List<TipoEmpleado> tipos) {
+        gbc.gridx = 0;
+        gbc.gridy = y;
+        add(new JLabel(label), gbc);
+
+        gbc.gridx = 1;
+        JComboBox<String> comboBox = new JComboBox<>();
+        for (TipoEmpleado tipo : tipos) {
+            comboBox.addItem(tipo.getNombre());
+        }
+        add(comboBox, gbc);
+        return comboBox;
     }
 }
