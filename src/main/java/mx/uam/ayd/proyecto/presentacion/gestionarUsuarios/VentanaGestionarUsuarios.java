@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.Component;
 import java.awt.*;
+import java.util.ArrayList;
+
 import mx.uam.ayd.proyecto.negocio.modelo.Empleado;
 
 @SuppressWarnings("serial")
@@ -16,6 +18,8 @@ public class VentanaGestionarUsuarios extends JFrame {
     private JTable jTable1;
     private JButton jButtonAgregar;
     private DefaultTableModel modeloTabla;
+
+    private java.util.List<Empleado> listaEmpleados = new ArrayList<>();
 
     public VentanaGestionarUsuarios() {
         jLabel1 = new JLabel();
@@ -93,6 +97,7 @@ public class VentanaGestionarUsuarios extends JFrame {
     }
 
     public void agregaEmpleadoATabla(Empleado empleado) {
+        listaEmpleados.add(empleado);
         modeloTabla.addRow(new Object[] {
                 empleado.getNumeroEmpleado(),
                 empleado.getNombre(),
@@ -109,13 +114,13 @@ public class VentanaGestionarUsuarios extends JFrame {
     }
 
     public void actualizarEmpleadoEnTabla(Empleado empleado) {
-        for (int i = 0; i < modeloTabla.getRowCount(); i++) {
-            String numero = (String) modeloTabla.getValueAt(i, 0);
-            if (numero.equals(empleado.getNumeroEmpleado())) {
+        for (int i = 0; i < listaEmpleados.size(); i++) {
+            if (listaEmpleados.get(i).getIdEmpleado().equals(empleado.getIdEmpleado())) {
+                listaEmpleados.set(i, empleado); // Actualiza la referencia
                 modeloTabla.setValueAt(empleado.getNombre(), i, 1);
                 modeloTabla.setValueAt(empleado.getApellidoPaterno(), i, 2);
                 modeloTabla.setValueAt(empleado.getApellidoMaterno(), i, 3);
-                modeloTabla.setValueAt("", i, 4);
+                modeloTabla.setValueAt("", i, 4); // contraseña
                 modeloTabla.setValueAt(empleado.getCorreoElectronico(), i, 5);
                 modeloTabla.setValueAt(empleado.getTelefono(), i, 6);
                 modeloTabla.setValueAt(empleado.getTipo() != null ? empleado.getTipo().getNombre() : "", i, 7);
@@ -126,9 +131,9 @@ public class VentanaGestionarUsuarios extends JFrame {
     }
 
     public void eliminarEmpleadoDeTabla(Empleado empleado) {
-        for (int i = 0; i < modeloTabla.getRowCount(); i++) {
-            String numero = (String) modeloTabla.getValueAt(i, 0);
-            if (numero.equals(empleado.getNumeroEmpleado())) {
+        for (int i = 0; i < listaEmpleados.size(); i++) {
+            if (listaEmpleados.get(i).getIdEmpleado().equals(empleado.getIdEmpleado())) {
+                listaEmpleados.remove(i);
                 modeloTabla.removeRow(i);
                 break;
             }
@@ -136,14 +141,7 @@ public class VentanaGestionarUsuarios extends JFrame {
     }
 
     private Empleado getEmpleadoDesdeTabla(int fila) {
-        Empleado empleado = new Empleado();
-        empleado.setNumeroEmpleado((String) modeloTabla.getValueAt(fila, 0));
-        empleado.setNombre((String) modeloTabla.getValueAt(fila, 1));
-        empleado.setApellidoPaterno((String) modeloTabla.getValueAt(fila, 2));
-        empleado.setApellidoMaterno((String) modeloTabla.getValueAt(fila, 3));
-        empleado.setCorreoElectronico((String) modeloTabla.getValueAt(fila, 5));
-        empleado.setTelefono((String) modeloTabla.getValueAt(fila, 6));
-        return empleado;
+        return listaEmpleados.get(fila);
     }
 
     private void editarEmpleado(int fila) {
