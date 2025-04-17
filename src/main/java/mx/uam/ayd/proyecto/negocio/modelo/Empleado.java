@@ -27,7 +27,8 @@ public class Empleado {
     @JoinColumn(name = "idTipoEmpleado")
     private TipoEmpleado tipo;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "idUsuario")
     private Usuario usuario;
+
 }
