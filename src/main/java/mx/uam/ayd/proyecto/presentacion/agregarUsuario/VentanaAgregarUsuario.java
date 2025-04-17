@@ -4,7 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
+
 import mx.uam.ayd.proyecto.negocio.modelo.Empleado;
+import mx.uam.ayd.proyecto.negocio.modelo.Sucursal;
 import mx.uam.ayd.proyecto.negocio.modelo.TipoEmpleado;
 import mx.uam.ayd.proyecto.presentacion.gestionarUsuarios.ControlGestionarUsuarios;
 
@@ -13,6 +15,7 @@ public class VentanaAgregarUsuario extends JDialog {
 
     private ControlGestionarUsuarios controlGestionarUsuarios;
     private List<TipoEmpleado> tiposEmpleado;
+    private List<Sucursal> sucursales;
 
     private JTextField campoNumeroEmpleado;
     private JTextField campoNombre;
@@ -21,15 +24,16 @@ public class VentanaAgregarUsuario extends JDialog {
     private JTextField campoCorreo;
     private JTextField campoTelefono;
     private JComboBox<String> comboPuesto;
-    private JTextField campoSucursal;
+    private JComboBox<String> comboSucursal;
 
     private JButton botonCerrar;
     private JButton botonAgregar;
 
-    public VentanaAgregarUsuario(JFrame parent, ControlGestionarUsuarios control, List<TipoEmpleado> tiposEmpleado) {
+    public VentanaAgregarUsuario(JFrame parent, ControlGestionarUsuarios control, List<TipoEmpleado> tiposEmpleado, List<Sucursal> sucursales) {
         super(parent, "Agregar nuevo usuario", true);
         this.controlGestionarUsuarios = control;
         this.tiposEmpleado = tiposEmpleado;
+        this.sucursales = sucursales;
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -57,9 +61,8 @@ public class VentanaAgregarUsuario extends JDialog {
         campoCorreo = addField("Correo:", ++gbc.gridy, gbc);
         campoTelefono = addField("Teléfono:", ++gbc.gridy, gbc);
         comboPuesto = addComboBox("Puesto:", ++gbc.gridy, gbc, tiposEmpleado);
-        campoSucursal = addField("Sucursal:", ++gbc.gridy, gbc);
+        comboSucursal = addSucursalComboBox("Sucursal:", ++gbc.gridy, gbc, sucursales);
 
-        // Botones
         gbc.gridy++;
         gbc.gridx = 0;
         botonCerrar = new JButton("Cerrar");
@@ -80,7 +83,6 @@ public class VentanaAgregarUsuario extends JDialog {
             nuevoEmpleado.setCorreoElectronico(campoCorreo.getText());
             nuevoEmpleado.setTelefono(campoTelefono.getText());
 
-            // Obtener TipoEmpleado por nombre seleccionado
             String tipoSeleccionado = (String) comboPuesto.getSelectedItem();
             TipoEmpleado tipo = tiposEmpleado.stream()
                     .filter(t -> t.getNombre().equalsIgnoreCase(tipoSeleccionado))
@@ -88,7 +90,13 @@ public class VentanaAgregarUsuario extends JDialog {
                     .orElse(null);
             nuevoEmpleado.setTipo(tipo);
 
-            // Enviar a persistencia desde el controlador
+            String sucursalSeleccionada = (String) comboSucursal.getSelectedItem();
+            Sucursal sucursal = sucursales.stream()
+                    .filter(s -> s.getNombre().equalsIgnoreCase(sucursalSeleccionada))
+                    .findFirst()
+                    .orElse(null);
+            nuevoEmpleado.setSucursal(sucursal);
+
             controlGestionarUsuarios.agregaEmpleado(nuevoEmpleado);
 
             JOptionPane.showMessageDialog(VentanaAgregarUsuario.this, "Empleado agregado exitosamente");
@@ -119,6 +127,20 @@ public class VentanaAgregarUsuario extends JDialog {
         JComboBox<String> comboBox = new JComboBox<>();
         for (TipoEmpleado tipo : tipos) {
             comboBox.addItem(tipo.getNombre());
+        }
+        add(comboBox, gbc);
+        return comboBox;
+    }
+
+    private JComboBox<String> addSucursalComboBox(String label, int y, GridBagConstraints gbc, List<Sucursal> sucursales) {
+        gbc.gridx = 0;
+        gbc.gridy = y;
+        add(new JLabel(label), gbc);
+
+        gbc.gridx = 1;
+        JComboBox<String> comboBox = new JComboBox<>();
+        for (Sucursal sucursal : sucursales) {
+            comboBox.addItem(sucursal.getNombre());
         }
         add(comboBox, gbc);
         return comboBox;

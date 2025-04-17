@@ -1,6 +1,9 @@
 package mx.uam.ayd.proyecto.presentacion.agregarUsuario;
 
 import javax.swing.JFrame;
+
+import mx.uam.ayd.proyecto.negocio.ServicioSucursal;
+import mx.uam.ayd.proyecto.negocio.modelo.Sucursal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,12 +21,17 @@ public class ControlAgregarUsuario {
     @Autowired
     private TipoEmpleadoRepository tipoEmpleadoRepository;
 
+    @Autowired
+    private ServicioSucursal servicioSucursal;
+
     public void inicia(JFrame parent, ControlGestionarUsuarios controlGestionarUsuarios) {
         List<TipoEmpleado> tiposEmpleado = StreamSupport
                 .stream(tipoEmpleadoRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
 
-        VentanaAgregarUsuario ventana = new VentanaAgregarUsuario(parent, controlGestionarUsuarios, tiposEmpleado);
+        List<Sucursal> sucursales = servicioSucursal.getAll();
+
+        VentanaAgregarUsuario ventana = new VentanaAgregarUsuario(parent, controlGestionarUsuarios, tiposEmpleado, sucursales);
         ventana.setVisible(true);
     }
 }
