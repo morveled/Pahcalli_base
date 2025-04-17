@@ -1,6 +1,5 @@
 package mx.uam.ayd.proyecto.presentacion.menu;
 
-import java.util.Optional;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ import mx.uam.ayd.proyecto.presentacion.loggin.ControlLoggin;
 import mx.uam.ayd.proyecto.presentacion.mostrarInventario.ControladorMostrarInventario;
 import mx.uam.ayd.proyecto.presentacion.visualizarSolicitudesAbastecimiento.ControlVisualizarSolicitudesAbastecimiento;
 import mx.uam.ayd.proyecto.presentacion.gestionarUsuarios.ControlGestionarUsuarios;
-
+import mx.uam.ayd.proyecto.presentacion.venta.ControlVenta;
 
 @Component
 public class ControlMenu {
@@ -33,6 +32,10 @@ public class ControlMenu {
 
     private ControlLoggin controlLoggin;
 
+    @Autowired
+    ControlVenta controladorMostrarRealizarVenta;
+    @Autowired
+    private SucursalRepository sucursalRepository;
     Sucursal sucursal;
     Empleado empleado;
     Usuario usuario;
@@ -77,5 +80,11 @@ public class ControlMenu {
     public void mostrarGestionUsuarios() {
         controlGestionarUsuarios.inicia();
     }
-        
+    
+    public void mostrarRealizarVenta() {
+        if(empleado == null) {
+            sucursal = sucursalRepository.findByIdSucursal(1L).orElse(null);
+        }
+        controladorMostrarRealizarVenta.inicia(sucursal, empleado);
+    }
 }

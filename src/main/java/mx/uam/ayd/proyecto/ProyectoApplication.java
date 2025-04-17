@@ -12,16 +12,17 @@ import mx.uam.ayd.proyecto.datos.GrupoRepository;
 import mx.uam.ayd.proyecto.datos.LaboratorioRepository;
 import mx.uam.ayd.proyecto.datos.ProductoRepository;
 import mx.uam.ayd.proyecto.datos.IngredienteRepository;
+import mx.uam.ayd.proyecto.datos.InventarioRepository;
 import mx.uam.ayd.proyecto.datos.SucursalRepository;
 import mx.uam.ayd.proyecto.datos.TipoEmpleadoRepository;
 import mx.uam.ayd.proyecto.datos.UsuarioRepository;
 import mx.uam.ayd.proyecto.datos.SolicitudReabastecimientoRepository;
 import mx.uam.ayd.proyecto.datos.DetallesSolicitudRepository;
-import mx.uam.ayd.proyecto.datos.InventarioRepository;
 import mx.uam.ayd.proyecto.negocio.modelo.CategoriaProducto;
 import mx.uam.ayd.proyecto.negocio.modelo.Empleado;
 import mx.uam.ayd.proyecto.negocio.modelo.Grupo;
 import mx.uam.ayd.proyecto.negocio.modelo.Ingrediente;
+import mx.uam.ayd.proyecto.negocio.modelo.Inventario;
 import mx.uam.ayd.proyecto.negocio.modelo.Laboratorio;
 import mx.uam.ayd.proyecto.negocio.modelo.Producto;
 import mx.uam.ayd.proyecto.negocio.modelo.Sucursal;
@@ -29,7 +30,6 @@ import mx.uam.ayd.proyecto.negocio.modelo.TipoEmpleado;
 import mx.uam.ayd.proyecto.negocio.modelo.Usuario;
 import mx.uam.ayd.proyecto.negocio.modelo.SolicitudReabastecimiento;
 import mx.uam.ayd.proyecto.negocio.modelo.DetallesSolicitud;
-import mx.uam.ayd.proyecto.negocio.modelo.Inventario;
 import java.util.Date;
 import mx.uam.ayd.proyecto.presentacion.loggin.ControlLoggin;
 import mx.uam.ayd.proyecto.presentacion.principal.ControlPrincipal;
@@ -90,8 +90,6 @@ public class ProyectoApplication {
 	
 	@Autowired
 	InventarioRepository inventarioRepository;
-
-
 
 	
 	/**
@@ -224,7 +222,7 @@ public class ProyectoApplication {
 		empleado3.setCorreoElectronico("gilberto.gonzalez@gmail.com");
 		empleado3.setTelefono("5534567890");
 		empleado3.setTipo(almacenista); // Asignar el tipo "Gerente"
-		empleado3.setSucursal(sucursal3);
+		empleado3.setSucursal(sucursal0);
 		empleadoRepository.save(empleado3);  
 
 		CategoriaProducto categoriaAnalgesicos = new CategoriaProducto();
@@ -516,5 +514,36 @@ public class ProyectoApplication {
     	invNorte5.setProducto(producto5);
     	invNorte5.setStock(3); // 3 unidades en stock
     	inventarioRepository.save(invNorte5);
+
+		Inventario inventario1 = new Inventario();
+		inventario1.setSucursal(sucursal1);
+		inventario1.setProducto(producto1);
+		inventario1.setStock(100);
+		inventarioRepository.save(inventario1);
+
+		Inventario inventario2 = new Inventario();
+		inventario2.setSucursal(sucursal1);
+		inventario2.setProducto(producto2);
+		inventario2.setStock(100);
+		inventarioRepository.save(inventario2);
+
+		Inventario inventario3 = new Inventario();
+		inventario3.setSucursal(sucursal1);
+		inventario3.setProducto(producto3);
+		inventario3.setStock(100);
+		inventarioRepository.save(inventario3);
+
+		Inventario inventario4 = new Inventario();
+		inventario4.setSucursal(sucursal1);
+		inventario4.setProducto(producto4);
+		inventario4.setStock(100);
+		inventarioRepository.save(inventario4);
+
+		Inventario inventario5 = new Inventario();
+		inventario5.setSucursal(sucursal1);
+		inventario5.setProducto(producto5);
+		inventario5.setStock(100);
+		inventarioRepository.save(inventario5);
+
 	}
 }
