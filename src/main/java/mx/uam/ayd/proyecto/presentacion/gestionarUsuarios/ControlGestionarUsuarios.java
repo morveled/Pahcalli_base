@@ -2,6 +2,8 @@ package mx.uam.ayd.proyecto.presentacion.gestionarUsuarios;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -66,4 +68,17 @@ public class ControlGestionarUsuarios {
         servicioEmpleado.eliminar(empleado.getIdEmpleado());
         ventanaGestionarUsuarios.eliminarEmpleadoDeTabla(empleado);
     }
+
+    public List<TipoEmpleado> obtenerTiposEmpleado() {
+        return StreamSupport
+                .stream(tipoEmpleadoRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
+    }
+
+    public List<Sucursal> obtenerSucursales() {
+        return StreamSupport
+                .stream(sucursalRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
+    }
+
 }

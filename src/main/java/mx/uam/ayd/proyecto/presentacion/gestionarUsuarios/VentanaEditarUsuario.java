@@ -4,7 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import mx.uam.ayd.proyecto.negocio.modelo.Empleado;
+import mx.uam.ayd.proyecto.negocio.modelo.Sucursal;
+import mx.uam.ayd.proyecto.negocio.modelo.TipoEmpleado;
 
 @SuppressWarnings("serial")
 public class VentanaEditarUsuario extends JDialog {
@@ -18,14 +21,22 @@ public class VentanaEditarUsuario extends JDialog {
     private JTextField campoApellidoMaterno;
     private JTextField campoCorreo;
     private JTextField campoTelefono;
+    private JComboBox<String> comboPuesto;
+    private JComboBox<String> comboSucursal;
 
     private JButton botonCerrar;
     private JButton botonGuardar;
+
+    private List<TipoEmpleado> tiposEmpleado;
+    private List<Sucursal> sucursales;
 
     public VentanaEditarUsuario(JFrame parent, Empleado empleado, ControlGestionarUsuarios control) {
         super(parent, "Editar usuario", true);
         this.empleado = empleado;
         this.controlGestionarUsuarios = control;
+
+        this.tiposEmpleado = control.obtenerTiposEmpleado();
+        this.sucursales = control.obtenerSucursales();
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -100,6 +111,30 @@ public class VentanaEditarUsuario extends JDialog {
         campoTelefono.setText(empleado.getTelefono());
         add(campoTelefono, gbc);
 
+        // Fila 7: Puesto (combo box)
+        gbc.gridy++;
+        gbc.gridx = 0;
+        add(new JLabel("Puesto:"), gbc);
+        gbc.gridx = 1;
+        comboPuesto = new JComboBox<>();
+        for (TipoEmpleado tipo : tiposEmpleado) {
+            comboPuesto.addItem(tipo.getNombre());
+        }
+        comboPuesto.setSelectedItem(empleado.getTipo() != null ? empleado.getTipo().getNombre() : "");
+        add(comboPuesto, gbc);
+
+        // Fila 8: Sucursal (combo box)
+        gbc.gridy++;
+        gbc.gridx = 0;
+        add(new JLabel("Sucursal:"), gbc);
+        gbc.gridx = 1;
+        comboSucursal = new JComboBox<>();
+        for (Sucursal sucursal : sucursales) {
+            comboSucursal.addItem(sucursal.getNombre());
+        }
+        comboSucursal.setSelectedItem(empleado.getSucursal() != null ? empleado.getSucursal().getNombre() : "");
+        add(comboSucursal, gbc);
+
         // Botones
         gbc.gridy++;
         gbc.gridx = 0;
@@ -115,7 +150,6 @@ public class VentanaEditarUsuario extends JDialog {
 
         botonGuardar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Actualizar datos del empleado
                 empleado.setNumeroEmpleado(campoNumeroEmpleado.getText());
                 empleado.setNombre(campoNombre.getText());
                 empleado.setApellidoPaterno(campoApellidoPaterno.getText());
@@ -123,13 +157,26 @@ public class VentanaEditarUsuario extends JDialog {
                 empleado.setCorreoElectronico(campoCorreo.getText());
                 empleado.setTelefono(campoTelefono.getText());
 
-                // Enviar cambios al controlador para persistir
+                String tipoSeleccionado = (String) comboPuesto.getSelectedItem();
+                TipoEmpleado tipo = tiposEmpleado.stream()
+                        .filter(t -> t.getNombre().equalsIgnoreCase(tipoSeleccionado))
+                        .findFirst()
+                        .orElse(null);
+                empleado.setTipo(tipo);
+
+                String sucursalSeleccionada = (String) comboSucursal.getSelectedItem();
+                Sucursal sucursal = sucursales.stream()
+                        .filter(s -> s.getNombre().equalsIgnoreCase(sucursalSeleccionada))
+                        .findFirst()
+                        .orElse(null);
+                empleado.setSucursal(sucursal);
+
                 controlGestionarUsuarios.actualizarEmpleado(empleado);
                 dispose();
             }
         });
 
-        setSize(500, 500);
+        setSize(500, 600);
         setLocationRelativeTo(parent);
     }
 }
