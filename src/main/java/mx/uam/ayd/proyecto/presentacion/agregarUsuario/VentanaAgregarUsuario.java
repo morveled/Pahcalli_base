@@ -5,30 +5,35 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
 
+import mx.uam.ayd.proyecto.negocio.modelo.Empleado;
+import mx.uam.ayd.proyecto.negocio.modelo.Sucursal;
 import mx.uam.ayd.proyecto.negocio.modelo.TipoEmpleado;
 import mx.uam.ayd.proyecto.presentacion.gestionarUsuarios.ControlGestionarUsuarios;
-import mx.uam.ayd.proyecto.presentacion.gestionarUsuarios.UsuarioTabla;
 
 @SuppressWarnings("serial")
 public class VentanaAgregarUsuario extends JDialog {
 
     private ControlGestionarUsuarios controlGestionarUsuarios;
+    private List<TipoEmpleado> tiposEmpleado;
+    private List<Sucursal> sucursales;
 
     private JTextField campoNumeroEmpleado;
     private JTextField campoNombre;
-    private JTextField campoApellido;
-    private JTextField campoContrasena;
+    private JTextField campoApellidoPaterno;
+    private JTextField campoApellidoMaterno;
     private JTextField campoCorreo;
     private JTextField campoTelefono;
     private JComboBox<String> comboPuesto;
-    private JTextField campoSucursal;
+    private JComboBox<String> comboSucursal;
 
     private JButton botonCerrar;
     private JButton botonAgregar;
 
-    public VentanaAgregarUsuario(JFrame parent, ControlGestionarUsuarios control, List<TipoEmpleado> tiposEmpleado) {
+    public VentanaAgregarUsuario(JFrame parent, ControlGestionarUsuarios control, List<TipoEmpleado> tiposEmpleado, List<Sucursal> sucursales) {
         super(parent, "Agregar nuevo usuario", true);
         this.controlGestionarUsuarios = control;
+        this.tiposEmpleado = tiposEmpleado;
+        this.sucursales = sucursales;
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -51,14 +56,13 @@ public class VentanaAgregarUsuario extends JDialog {
 
         campoNumeroEmpleado = addField("Número de empleado:", ++gbc.gridy, gbc);
         campoNombre = addField("Nombre(s):", ++gbc.gridy, gbc);
-        campoApellido = addField("Apellido(s):", ++gbc.gridy, gbc);
-        campoContrasena = addField("Contraseña:", ++gbc.gridy, gbc);
+        campoApellidoPaterno = addField("Apellido paterno:", ++gbc.gridy, gbc);
+        campoApellidoMaterno = addField("Apellido materno:", ++gbc.gridy, gbc);
         campoCorreo = addField("Correo:", ++gbc.gridy, gbc);
         campoTelefono = addField("Teléfono:", ++gbc.gridy, gbc);
         comboPuesto = addComboBox("Puesto:", ++gbc.gridy, gbc, tiposEmpleado);
-        campoSucursal = addField("Sucursal:", ++gbc.gridy, gbc);
+        comboSucursal = addSucursalComboBox("Sucursal:", ++gbc.gridy, gbc, sucursales);
 
-        // Botones
         gbc.gridy++;
         gbc.gridx = 0;
         botonCerrar = new JButton("Cerrar");
@@ -71,23 +75,53 @@ public class VentanaAgregarUsuario extends JDialog {
         botonCerrar.addActionListener(e -> dispose());
 
         botonAgregar.addActionListener((ActionEvent e) -> {
-            UsuarioTabla nuevoUsuario = new UsuarioTabla(
-                campoNumeroEmpleado.getText(),
-                campoNombre.getText(),
-                campoApellido.getText(),
-                campoContrasena.getText(),
-                campoCorreo.getText(),
-                campoTelefono.getText(),
-                comboPuesto.getSelectedItem().toString(),
-                campoSucursal.getText()
-            );
+            if (camposVacios()) {
+                JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-            controlGestionarUsuarios.agregaUsuario(nuevoUsuario);
-            JOptionPane.showMessageDialog(VentanaAgregarUsuario.this, "Usuario agregado exitosamente");
+            String correo = campoCorreo.getText();
+            String telefono = campoTelefono.getText();
+
+            if (!esCorreoValido(correo)) {
+                JOptionPane.showMessageDialog(this, "Por favor, ingresa un correo electrónico válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!esTelefonoValido(telefono)) {
+                JOptionPane.showMessageDialog(this, "El número de teléfono debe contener exactamente 10 dígitos numéricos.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            Empleado nuevoEmpleado = new Empleado();
+            nuevoEmpleado.setNumeroEmpleado(campoNumeroEmpleado.getText());
+            nuevoEmpleado.setNombre(campoNombre.getText());
+            nuevoEmpleado.setApellidoPaterno(campoApellidoPaterno.getText());
+            nuevoEmpleado.setApellidoMaterno(campoApellidoMaterno.getText());
+            nuevoEmpleado.setCorreoElectronico(correo);
+            nuevoEmpleado.setTelefono(telefono);
+
+            String tipoSeleccionado = (String) comboPuesto.getSelectedItem();
+            TipoEmpleado tipo = tiposEmpleado.stream()
+                    .filter(t -> t.getNombre().equalsIgnoreCase(tipoSeleccionado))
+                    .findFirst()
+                    .orElse(null);
+            nuevoEmpleado.setTipo(tipo);
+
+            String sucursalSeleccionada = (String) comboSucursal.getSelectedItem();
+            Sucursal sucursal = sucursales.stream()
+                    .filter(s -> s.getNombre().equalsIgnoreCase(sucursalSeleccionada))
+                    .findFirst()
+                    .orElse(null);
+            nuevoEmpleado.setSucursal(sucursal);
+
+            controlGestionarUsuarios.agregaEmpleado(nuevoEmpleado);
+
+            JOptionPane.showMessageDialog(this, "Empleado agregado exitosamente");
             dispose();
         });
 
-        setSize(500, 500);
+        setSize(500, 600);
         setLocationRelativeTo(parent);
     }
 
@@ -114,5 +148,36 @@ public class VentanaAgregarUsuario extends JDialog {
         }
         add(comboBox, gbc);
         return comboBox;
+    }
+
+    private JComboBox<String> addSucursalComboBox(String label, int y, GridBagConstraints gbc, List<Sucursal> sucursales) {
+        gbc.gridx = 0;
+        gbc.gridy = y;
+        add(new JLabel(label), gbc);
+
+        gbc.gridx = 1;
+        JComboBox<String> comboBox = new JComboBox<>();
+        for (Sucursal sucursal : sucursales) {
+            comboBox.addItem(sucursal.getNombre());
+        }
+        add(comboBox, gbc);
+        return comboBox;
+    }
+
+    private boolean esCorreoValido(String correo) {
+        return correo != null && correo.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+    }
+
+    private boolean esTelefonoValido(String telefono) {
+        return telefono != null && telefono.matches("^\\d{10}$");
+    }
+
+    private boolean camposVacios() {
+        return campoNumeroEmpleado.getText().isEmpty()
+                || campoNombre.getText().isEmpty()
+                || campoApellidoPaterno.getText().isEmpty()
+                || campoApellidoMaterno.getText().isEmpty()
+                || campoCorreo.getText().isEmpty()
+                || campoTelefono.getText().isEmpty();
     }
 }
