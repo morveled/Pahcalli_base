@@ -4,20 +4,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
-
+import mx.uam.ayd.proyecto.negocio.modelo.Empleado;
 import mx.uam.ayd.proyecto.negocio.modelo.TipoEmpleado;
 import mx.uam.ayd.proyecto.presentacion.gestionarUsuarios.ControlGestionarUsuarios;
-import mx.uam.ayd.proyecto.presentacion.gestionarUsuarios.UsuarioTabla;
 
 @SuppressWarnings("serial")
 public class VentanaAgregarUsuario extends JDialog {
 
     private ControlGestionarUsuarios controlGestionarUsuarios;
+    private List<TipoEmpleado> tiposEmpleado;
 
     private JTextField campoNumeroEmpleado;
     private JTextField campoNombre;
-    private JTextField campoApellido;
-    private JTextField campoContrasena;
+    private JTextField campoApellidoPaterno;
+    private JTextField campoApellidoMaterno;
     private JTextField campoCorreo;
     private JTextField campoTelefono;
     private JComboBox<String> comboPuesto;
@@ -29,6 +29,7 @@ public class VentanaAgregarUsuario extends JDialog {
     public VentanaAgregarUsuario(JFrame parent, ControlGestionarUsuarios control, List<TipoEmpleado> tiposEmpleado) {
         super(parent, "Agregar nuevo usuario", true);
         this.controlGestionarUsuarios = control;
+        this.tiposEmpleado = tiposEmpleado;
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -51,8 +52,8 @@ public class VentanaAgregarUsuario extends JDialog {
 
         campoNumeroEmpleado = addField("Número de empleado:", ++gbc.gridy, gbc);
         campoNombre = addField("Nombre(s):", ++gbc.gridy, gbc);
-        campoApellido = addField("Apellido(s):", ++gbc.gridy, gbc);
-        campoContrasena = addField("Contraseña:", ++gbc.gridy, gbc);
+        campoApellidoPaterno = addField("Apellido paterno:", ++gbc.gridy, gbc);
+        campoApellidoMaterno = addField("Apellido materno:", ++gbc.gridy, gbc);
         campoCorreo = addField("Correo:", ++gbc.gridy, gbc);
         campoTelefono = addField("Teléfono:", ++gbc.gridy, gbc);
         comboPuesto = addComboBox("Puesto:", ++gbc.gridy, gbc, tiposEmpleado);
@@ -71,23 +72,30 @@ public class VentanaAgregarUsuario extends JDialog {
         botonCerrar.addActionListener(e -> dispose());
 
         botonAgregar.addActionListener((ActionEvent e) -> {
-            UsuarioTabla nuevoUsuario = new UsuarioTabla(
-                campoNumeroEmpleado.getText(),
-                campoNombre.getText(),
-                campoApellido.getText(),
-                campoContrasena.getText(),
-                campoCorreo.getText(),
-                campoTelefono.getText(),
-                comboPuesto.getSelectedItem().toString(),
-                campoSucursal.getText()
-            );
+            Empleado nuevoEmpleado = new Empleado();
+            nuevoEmpleado.setNumeroEmpleado(campoNumeroEmpleado.getText());
+            nuevoEmpleado.setNombre(campoNombre.getText());
+            nuevoEmpleado.setApellidoPaterno(campoApellidoPaterno.getText());
+            nuevoEmpleado.setApellidoMaterno(campoApellidoMaterno.getText());
+            nuevoEmpleado.setCorreoElectronico(campoCorreo.getText());
+            nuevoEmpleado.setTelefono(campoTelefono.getText());
 
-            controlGestionarUsuarios.agregaUsuario(nuevoUsuario);
-            JOptionPane.showMessageDialog(VentanaAgregarUsuario.this, "Usuario agregado exitosamente");
+            // Obtener TipoEmpleado por nombre seleccionado
+            String tipoSeleccionado = (String) comboPuesto.getSelectedItem();
+            TipoEmpleado tipo = tiposEmpleado.stream()
+                    .filter(t -> t.getNombre().equalsIgnoreCase(tipoSeleccionado))
+                    .findFirst()
+                    .orElse(null);
+            nuevoEmpleado.setTipo(tipo);
+
+            // Enviar a persistencia desde el controlador
+            controlGestionarUsuarios.agregaEmpleado(nuevoEmpleado);
+
+            JOptionPane.showMessageDialog(VentanaAgregarUsuario.this, "Empleado agregado exitosamente");
             dispose();
         });
 
-        setSize(500, 500);
+        setSize(500, 600);
         setLocationRelativeTo(parent);
     }
 

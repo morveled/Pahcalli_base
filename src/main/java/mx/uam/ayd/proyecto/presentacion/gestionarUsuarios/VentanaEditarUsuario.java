@@ -4,28 +4,27 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import mx.uam.ayd.proyecto.negocio.modelo.Empleado;
 
 @SuppressWarnings("serial")
 public class VentanaEditarUsuario extends JDialog {
 
     private ControlGestionarUsuarios controlGestionarUsuarios;
-    private UsuarioTabla usuario;
+    private Empleado empleado;
 
     private JTextField campoNumeroEmpleado;
     private JTextField campoNombre;
-    private JTextField campoApellido;
-    private JTextField campoContrasena;
+    private JTextField campoApellidoPaterno;
+    private JTextField campoApellidoMaterno;
     private JTextField campoCorreo;
     private JTextField campoTelefono;
-    private JTextField campoPuesto;
-    private JTextField campoSucursal;
 
     private JButton botonCerrar;
     private JButton botonGuardar;
 
-    public VentanaEditarUsuario(JFrame parent, UsuarioTabla usuario, ControlGestionarUsuarios control) {
+    public VentanaEditarUsuario(JFrame parent, Empleado empleado, ControlGestionarUsuarios control) {
         super(parent, "Editar usuario", true);
-        this.usuario = usuario;
+        this.empleado = empleado;
         this.controlGestionarUsuarios = control;
 
         setLayout(new GridBagLayout());
@@ -47,77 +46,59 @@ public class VentanaEditarUsuario extends JDialog {
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.WEST;
 
-        // Fila 1
+        // Fila 1: Número de empleado
         gbc.gridy++;
         gbc.gridx = 0;
         add(new JLabel("Número de empleado:"), gbc);
         gbc.gridx = 1;
         campoNumeroEmpleado = new JTextField(20);
-        campoNumeroEmpleado.setText(usuario.getNumeroEmpleado());
+        campoNumeroEmpleado.setText(empleado.getNumeroEmpleado());
         add(campoNumeroEmpleado, gbc);
 
-        // Fila 2
+        // Fila 2: Nombre
         gbc.gridy++;
         gbc.gridx = 0;
         add(new JLabel("Nombre(s):"), gbc);
         gbc.gridx = 1;
         campoNombre = new JTextField(20);
-        campoNombre.setText(usuario.getNombre());
+        campoNombre.setText(empleado.getNombre());
         add(campoNombre, gbc);
 
-        // Fila 3
+        // Fila 3: Apellido paterno
         gbc.gridy++;
         gbc.gridx = 0;
-        add(new JLabel("Apellido(s):"), gbc);
+        add(new JLabel("Apellido paterno:"), gbc);
         gbc.gridx = 1;
-        campoApellido = new JTextField(20);
-        campoApellido.setText(usuario.getApellido());
-        add(campoApellido, gbc);
+        campoApellidoPaterno = new JTextField(20);
+        campoApellidoPaterno.setText(empleado.getApellidoPaterno());
+        add(campoApellidoPaterno, gbc);
 
-        // Fila 4
+        // Fila 4: Apellido materno
         gbc.gridy++;
         gbc.gridx = 0;
-        add(new JLabel("Contraseña:"), gbc);
+        add(new JLabel("Apellido materno:"), gbc);
         gbc.gridx = 1;
-        campoContrasena = new JTextField(20);
-        campoContrasena.setText(usuario.getContrasena());
-        add(campoContrasena, gbc);
+        campoApellidoMaterno = new JTextField(20);
+        campoApellidoMaterno.setText(empleado.getApellidoMaterno());
+        add(campoApellidoMaterno, gbc);
 
-        // Fila 5
+        // Fila 5: Correo
         gbc.gridy++;
         gbc.gridx = 0;
-        add(new JLabel("Correo:"), gbc);
+        add(new JLabel("Correo electrónico:"), gbc);
         gbc.gridx = 1;
         campoCorreo = new JTextField(20);
-        campoCorreo.setText(usuario.getCorreo());
+        campoCorreo.setText(empleado.getCorreoElectronico());
         add(campoCorreo, gbc);
 
-        // Fila 6
+        // Fila 6: Teléfono
         gbc.gridy++;
         gbc.gridx = 0;
         add(new JLabel("Teléfono:"), gbc);
         gbc.gridx = 1;
         campoTelefono = new JTextField(20);
-        campoTelefono.setText(usuario.getTelefono());
+        campoTelefono.setText(empleado.getTelefono());
         add(campoTelefono, gbc);
-
-        // Fila 7
-        gbc.gridy++;
-        gbc.gridx = 0;
-        add(new JLabel("Puesto:"), gbc);
-        gbc.gridx = 1;
-        campoPuesto = new JTextField(20);
-        campoPuesto.setText(usuario.getPuesto());
-        add(campoPuesto, gbc);
-
-        // Fila 8
-        gbc.gridy++;
-        gbc.gridx = 0;
-        add(new JLabel("Sucursal:"), gbc);
-        gbc.gridx = 1;
-        campoSucursal = new JTextField(20);
-        campoSucursal.setText(usuario.getSucursal());
-        add(campoSucursal, gbc);
 
         // Botones
         gbc.gridy++;
@@ -134,18 +115,16 @@ public class VentanaEditarUsuario extends JDialog {
 
         botonGuardar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Guardar los cambios en el objeto usuario
-                usuario.setNumeroEmpleado(campoNumeroEmpleado.getText());
-                usuario.setNombre(campoNombre.getText());
-                usuario.setApellido(campoApellido.getText());
-                usuario.setContrasena(campoContrasena.getText());
-                usuario.setCorreo(campoCorreo.getText());
-                usuario.setTelefono(campoTelefono.getText());
-                usuario.setPuesto(campoPuesto.getText());
-                usuario.setSucursal(campoSucursal.getText());
+                // Actualizar datos del empleado
+                empleado.setNumeroEmpleado(campoNumeroEmpleado.getText());
+                empleado.setNombre(campoNombre.getText());
+                empleado.setApellidoPaterno(campoApellidoPaterno.getText());
+                empleado.setApellidoMaterno(campoApellidoMaterno.getText());
+                empleado.setCorreoElectronico(campoCorreo.getText());
+                empleado.setTelefono(campoTelefono.getText());
 
-                // Enviar los cambios al controlador
-                controlGestionarUsuarios.actualizarUsuario(usuario);
+                // Enviar cambios al controlador para persistir
+                controlGestionarUsuarios.actualizarEmpleado(empleado);
                 dispose();
             }
         });
