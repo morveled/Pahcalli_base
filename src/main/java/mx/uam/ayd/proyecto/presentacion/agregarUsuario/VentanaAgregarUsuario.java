@@ -75,13 +75,31 @@ public class VentanaAgregarUsuario extends JDialog {
         botonCerrar.addActionListener(e -> dispose());
 
         botonAgregar.addActionListener((ActionEvent e) -> {
+            if (camposVacios()) {
+                JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String correo = campoCorreo.getText();
+            String telefono = campoTelefono.getText();
+
+            if (!esCorreoValido(correo)) {
+                JOptionPane.showMessageDialog(this, "Por favor, ingresa un correo electrónico válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!esTelefonoValido(telefono)) {
+                JOptionPane.showMessageDialog(this, "El número de teléfono debe contener exactamente 10 dígitos numéricos.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             Empleado nuevoEmpleado = new Empleado();
             nuevoEmpleado.setNumeroEmpleado(campoNumeroEmpleado.getText());
             nuevoEmpleado.setNombre(campoNombre.getText());
             nuevoEmpleado.setApellidoPaterno(campoApellidoPaterno.getText());
             nuevoEmpleado.setApellidoMaterno(campoApellidoMaterno.getText());
-            nuevoEmpleado.setCorreoElectronico(campoCorreo.getText());
-            nuevoEmpleado.setTelefono(campoTelefono.getText());
+            nuevoEmpleado.setCorreoElectronico(correo);
+            nuevoEmpleado.setTelefono(telefono);
 
             String tipoSeleccionado = (String) comboPuesto.getSelectedItem();
             TipoEmpleado tipo = tiposEmpleado.stream()
@@ -99,7 +117,7 @@ public class VentanaAgregarUsuario extends JDialog {
 
             controlGestionarUsuarios.agregaEmpleado(nuevoEmpleado);
 
-            JOptionPane.showMessageDialog(VentanaAgregarUsuario.this, "Empleado agregado exitosamente");
+            JOptionPane.showMessageDialog(this, "Empleado agregado exitosamente");
             dispose();
         });
 
@@ -144,5 +162,22 @@ public class VentanaAgregarUsuario extends JDialog {
         }
         add(comboBox, gbc);
         return comboBox;
+    }
+
+    private boolean esCorreoValido(String correo) {
+        return correo != null && correo.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+    }
+
+    private boolean esTelefonoValido(String telefono) {
+        return telefono != null && telefono.matches("^\\d{10}$");
+    }
+
+    private boolean camposVacios() {
+        return campoNumeroEmpleado.getText().isEmpty()
+                || campoNombre.getText().isEmpty()
+                || campoApellidoPaterno.getText().isEmpty()
+                || campoApellidoMaterno.getText().isEmpty()
+                || campoCorreo.getText().isEmpty()
+                || campoTelefono.getText().isEmpty();
     }
 }

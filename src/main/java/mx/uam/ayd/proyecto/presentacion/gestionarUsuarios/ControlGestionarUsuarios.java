@@ -36,23 +36,21 @@ public class ControlGestionarUsuarios {
 
     public void inicia() {
         ventanaGestionarUsuarios.setControl(this);
-
         List<Empleado> empleados = servicioEmpleado.getAll();
-        for (Empleado empleado : empleados) {
-            ventanaGestionarUsuarios.agregaEmpleadoATabla(empleado);
-        }
-
-        ventanaGestionarUsuarios.muestra();
+        ventanaGestionarUsuarios.muestra(empleados);
     }
+
 
     public void lanzarVentanaAgregarUsuario() {
         controlAgregarUsuario.inicia(ventanaGestionarUsuarios, this);
     }
 
     public void agregaEmpleado(Empleado empleado) {
-        Empleado guardado = servicioEmpleado.crear(empleado);
-        ventanaGestionarUsuarios.agregaEmpleadoATabla(guardado);
+        servicioEmpleado.crear(empleado);
+        List<Empleado> empleados = servicioEmpleado.getAll();
+        ventanaGestionarUsuarios.muestra(empleados);
     }
+
 
     public void editarEmpleado(Empleado empleado, VentanaGestionarUsuarios ventana) {
         VentanaEditarUsuario ventanaEditarUsuario = new VentanaEditarUsuario(ventana, empleado, this);

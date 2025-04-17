@@ -5,6 +5,7 @@ import javax.swing.table.*;
 import java.awt.Component;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import mx.uam.ayd.proyecto.negocio.modelo.Empleado;
 
@@ -27,7 +28,7 @@ public class VentanaGestionarUsuarios extends JFrame {
         jTable1 = new JTable();
         jButtonAgregar = new JButton();
 
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 18));
         jLabel1.setText("Gestión de usuarios");
 
@@ -88,7 +89,11 @@ public class VentanaGestionarUsuarios extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    public void muestra() {
+    public void muestra(List<Empleado> empleados) {
+        limpiarTabla();
+        for (Empleado empleado : empleados) {
+            agregaEmpleadoATabla(empleado);
+        }
         setVisible(true);
     }
 
@@ -154,6 +159,11 @@ public class VentanaGestionarUsuarios extends JFrame {
         controlGestionarUsuarios.eliminarEmpleado(empleado);
     }
 
+    private void limpiarTabla() {
+        modeloTabla.setRowCount(0);
+        listaEmpleados.clear();
+    }
+
     class BotonRenderer extends JButton implements TableCellRenderer {
 
         private String text;
@@ -171,7 +181,15 @@ public class VentanaGestionarUsuarios extends JFrame {
                 JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column
         ) {
             setText(text);
-            setBackground(bg);
+
+            if (isSelected) {
+                setBackground(bg.darker());
+            } else {
+                setBackground(bg);
+            }
+
+            setForeground(Color.WHITE);
+            setBorderPainted(false);
             return this;
         }
     }

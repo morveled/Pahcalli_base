@@ -3,7 +3,6 @@ package mx.uam.ayd.proyecto.presentacion.gestionarUsuarios;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 import mx.uam.ayd.proyecto.negocio.modelo.Empleado;
 import mx.uam.ayd.proyecto.negocio.modelo.Sucursal;
@@ -57,63 +56,15 @@ public class VentanaEditarUsuario extends JDialog {
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.WEST;
 
-        // Fila 1: Número de empleado
-        gbc.gridy++;
-        gbc.gridx = 0;
-        add(new JLabel("Número de empleado:"), gbc);
-        gbc.gridx = 1;
-        campoNumeroEmpleado = new JTextField(20);
-        campoNumeroEmpleado.setText(empleado.getNumeroEmpleado());
-        add(campoNumeroEmpleado, gbc);
+        campoNumeroEmpleado = addField("Número de empleado:", ++gbc.gridy, gbc, empleado.getNumeroEmpleado());
+        campoNombre = addField("Nombre(s):", ++gbc.gridy, gbc, empleado.getNombre());
+        campoApellidoPaterno = addField("Apellido paterno:", ++gbc.gridy, gbc, empleado.getApellidoPaterno());
+        campoApellidoMaterno = addField("Apellido materno:", ++gbc.gridy, gbc, empleado.getApellidoMaterno());
+        campoCorreo = addField("Correo electrónico:", ++gbc.gridy, gbc, empleado.getCorreoElectronico());
+        campoTelefono = addField("Teléfono:", ++gbc.gridy, gbc, empleado.getTelefono());
 
-        // Fila 2: Nombre
-        gbc.gridy++;
         gbc.gridx = 0;
-        add(new JLabel("Nombre(s):"), gbc);
-        gbc.gridx = 1;
-        campoNombre = new JTextField(20);
-        campoNombre.setText(empleado.getNombre());
-        add(campoNombre, gbc);
-
-        // Fila 3: Apellido paterno
         gbc.gridy++;
-        gbc.gridx = 0;
-        add(new JLabel("Apellido paterno:"), gbc);
-        gbc.gridx = 1;
-        campoApellidoPaterno = new JTextField(20);
-        campoApellidoPaterno.setText(empleado.getApellidoPaterno());
-        add(campoApellidoPaterno, gbc);
-
-        // Fila 4: Apellido materno
-        gbc.gridy++;
-        gbc.gridx = 0;
-        add(new JLabel("Apellido materno:"), gbc);
-        gbc.gridx = 1;
-        campoApellidoMaterno = new JTextField(20);
-        campoApellidoMaterno.setText(empleado.getApellidoMaterno());
-        add(campoApellidoMaterno, gbc);
-
-        // Fila 5: Correo
-        gbc.gridy++;
-        gbc.gridx = 0;
-        add(new JLabel("Correo electrónico:"), gbc);
-        gbc.gridx = 1;
-        campoCorreo = new JTextField(20);
-        campoCorreo.setText(empleado.getCorreoElectronico());
-        add(campoCorreo, gbc);
-
-        // Fila 6: Teléfono
-        gbc.gridy++;
-        gbc.gridx = 0;
-        add(new JLabel("Teléfono:"), gbc);
-        gbc.gridx = 1;
-        campoTelefono = new JTextField(20);
-        campoTelefono.setText(empleado.getTelefono());
-        add(campoTelefono, gbc);
-
-        // Fila 7: Puesto (combo box)
-        gbc.gridy++;
-        gbc.gridx = 0;
         add(new JLabel("Puesto:"), gbc);
         gbc.gridx = 1;
         comboPuesto = new JComboBox<>();
@@ -123,9 +74,8 @@ public class VentanaEditarUsuario extends JDialog {
         comboPuesto.setSelectedItem(empleado.getTipo() != null ? empleado.getTipo().getNombre() : "");
         add(comboPuesto, gbc);
 
-        // Fila 8: Sucursal (combo box)
-        gbc.gridy++;
         gbc.gridx = 0;
+        gbc.gridy++;
         add(new JLabel("Sucursal:"), gbc);
         gbc.gridx = 1;
         comboSucursal = new JComboBox<>();
@@ -135,7 +85,6 @@ public class VentanaEditarUsuario extends JDialog {
         comboSucursal.setSelectedItem(empleado.getSucursal() != null ? empleado.getSucursal().getNombre() : "");
         add(comboSucursal, gbc);
 
-        // Botones
         gbc.gridy++;
         gbc.gridx = 0;
         botonCerrar = new JButton("Cerrar");
@@ -145,38 +94,68 @@ public class VentanaEditarUsuario extends JDialog {
         botonGuardar = new JButton("Guardar cambios");
         add(botonGuardar, gbc);
 
-        // Eventos
         botonCerrar.addActionListener(e -> dispose());
 
-        botonGuardar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                empleado.setNumeroEmpleado(campoNumeroEmpleado.getText());
-                empleado.setNombre(campoNombre.getText());
-                empleado.setApellidoPaterno(campoApellidoPaterno.getText());
-                empleado.setApellidoMaterno(campoApellidoMaterno.getText());
-                empleado.setCorreoElectronico(campoCorreo.getText());
-                empleado.setTelefono(campoTelefono.getText());
+        botonGuardar.addActionListener((ActionEvent e) -> {
+            String correo = campoCorreo.getText();
+            String telefono = campoTelefono.getText();
 
-                String tipoSeleccionado = (String) comboPuesto.getSelectedItem();
-                TipoEmpleado tipo = tiposEmpleado.stream()
-                        .filter(t -> t.getNombre().equalsIgnoreCase(tipoSeleccionado))
-                        .findFirst()
-                        .orElse(null);
-                empleado.setTipo(tipo);
-
-                String sucursalSeleccionada = (String) comboSucursal.getSelectedItem();
-                Sucursal sucursal = sucursales.stream()
-                        .filter(s -> s.getNombre().equalsIgnoreCase(sucursalSeleccionada))
-                        .findFirst()
-                        .orElse(null);
-                empleado.setSucursal(sucursal);
-
-                controlGestionarUsuarios.actualizarEmpleado(empleado);
-                dispose();
+            if (!esCorreoValido(correo)) {
+                JOptionPane.showMessageDialog(this, "Por favor, ingresa un correo electrónico válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
+
+            if (!esTelefonoValido(telefono)) {
+                JOptionPane.showMessageDialog(this, "El número de teléfono debe contener exactamente 10 dígitos numéricos.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            empleado.setNumeroEmpleado(campoNumeroEmpleado.getText());
+            empleado.setNombre(campoNombre.getText());
+            empleado.setApellidoPaterno(campoApellidoPaterno.getText());
+            empleado.setApellidoMaterno(campoApellidoMaterno.getText());
+            empleado.setCorreoElectronico(correo);
+            empleado.setTelefono(telefono);
+
+            String tipoSeleccionado = (String) comboPuesto.getSelectedItem();
+            TipoEmpleado tipo = tiposEmpleado.stream()
+                    .filter(t -> t.getNombre().equalsIgnoreCase(tipoSeleccionado))
+                    .findFirst()
+                    .orElse(null);
+            empleado.setTipo(tipo);
+
+            String sucursalSeleccionada = (String) comboSucursal.getSelectedItem();
+            Sucursal sucursal = sucursales.stream()
+                    .filter(s -> s.getNombre().equalsIgnoreCase(sucursalSeleccionada))
+                    .findFirst()
+                    .orElse(null);
+            empleado.setSucursal(sucursal);
+
+            controlGestionarUsuarios.actualizarEmpleado(empleado);
+            dispose();
         });
 
         setSize(500, 600);
         setLocationRelativeTo(parent);
+    }
+
+    private JTextField addField(String label, int y, GridBagConstraints gbc, String value) {
+        gbc.gridx = 0;
+        gbc.gridy = y;
+        add(new JLabel(label), gbc);
+
+        gbc.gridx = 1;
+        JTextField field = new JTextField(20);
+        field.setText(value);
+        add(field, gbc);
+        return field;
+    }
+
+    private boolean esCorreoValido(String correo) {
+        return correo != null && correo.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+    }
+
+    private boolean esTelefonoValido(String telefono) {
+        return telefono != null && telefono.matches("^\\d{10}$");
     }
 }
