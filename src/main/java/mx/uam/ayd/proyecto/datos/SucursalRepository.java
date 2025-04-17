@@ -11,4 +11,5 @@ public interface SucursalRepository extends CrudRepository<Sucursal, Long>{
    public Optional<Sucursal> findByIdSucursal(Long id); 
 
    public Optional<Sucursal> findByNombre(String nombre);
+
 }

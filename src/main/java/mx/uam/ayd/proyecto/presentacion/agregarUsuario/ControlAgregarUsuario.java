@@ -1,65 +1,36 @@
 package mx.uam.ayd.proyecto.presentacion.agregarUsuario;
 
-import java.util.List;
-
+import javax.swing.JFrame;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import mx.uam.ayd.proyecto.negocio.ServicioGrupo;
-import mx.uam.ayd.proyecto.negocio.ServicioUsuario;
-import mx.uam.ayd.proyecto.negocio.modelo.Grupo;
+import mx.uam.ayd.proyecto.datos.TipoEmpleadoRepository;
+import mx.uam.ayd.proyecto.negocio.modelo.TipoEmpleado;
+import mx.uam.ayd.proyecto.presentacion.gestionarUsuarios.ControlGestionarUsuarios;
 
-/**
- * 
- * Módulo de control para la historia de usuario AgregarUsuario
- * 
- * @author humbertocervantes
- *
- */
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 @Component
 public class ControlAgregarUsuario {
-	
-	@Autowired
-	private ServicioUsuario servicioUsuario;
-	
-	@Autowired
-	private ServicioGrupo servicioGrupo;
-	
-	@Autowired
-	private VentanaAgregarUsuario ventana;
-	
-	/**
-	 * Inicia la historia de usuario
-	 * 
-	 */
-	public void inicia() {
-		
-		List <Grupo> grupos = servicioGrupo.recuperaGrupos();
-		
-		ventana.muestra(this, grupos);
-		
-	}
 
-	public void agregaUsuario(String nombre, String apellido, String grupo) {
+    @Autowired
+    private TipoEmpleadoRepository tipoEmpleadoRepository;
 
-		try {
-			servicioUsuario.agregaUsuario(nombre, apellido, grupo);
-			ventana.muestraDialogoConMensaje("Usuario agregado exitosamente");
-		} catch(Exception ex) {
-			ventana.muestraDialogoConMensaje("Error al agregar usuario: "+ex.getMessage());
-		}
-		
-		termina();
-		
-	}
-	
-	/**
-	 * Termina la historia de usuario
-	 * 
-	 */
-	public void termina() {
-		ventana.setVisible(false);		
-	}
+    /**
+     * Lanza la ventana de Agregar Usuario y le pasa el control principal de gestionar usuarios.
+     * 
+     * @param parent La ventana padre (VentanaGestionarUsuarios)
+     * @param controlGestionarUsuarios El controlador que maneja la lista de usuarios
+     */
+    public void inicia(JFrame parent, ControlGestionarUsuarios controlGestionarUsuarios) {
+        List<TipoEmpleado> tiposEmpleado = StreamSupport
+            .stream(tipoEmpleadoRepository.findAll().spliterator(), false)
+            .collect(Collectors.toList());
 
+        VentanaAgregarUsuario ventana = new VentanaAgregarUsuario(parent, controlGestionarUsuarios, tiposEmpleado);
+        ventana.setVisible(true);
+    }
 }
