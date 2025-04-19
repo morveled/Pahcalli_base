@@ -51,6 +51,7 @@ public class ControlMenu {
         this.usuario = usuario;
         this.empleado = usuario.getEmpleado();
         this.sucursal = empleado.getSucursal();
+        ventanaMenu.configurarVentana(empleado);
         ventanaMenu.muestra(this);
     }
     
@@ -59,7 +60,7 @@ public class ControlMenu {
     }
     
     public void mostrarMostrarInventario() {
-        controladorMostrarInventario.inicia(sucursal);
+        controladorMostrarInventario.inicia(sucursal,empleado.getTipo());
     }
     
     /**
