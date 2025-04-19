@@ -66,6 +66,10 @@ public class VentanaMostrarInventario extends javax.swing.JFrame {
         
         tablaInventario.setModel(modelo);
     }
+
+    public void desactivarSolicitud() {
+        botonSolicitarReabastecimiento.setEnabled(false);
+    }
     
     // Componentes de la interfaz
     private JTable tablaInventario;

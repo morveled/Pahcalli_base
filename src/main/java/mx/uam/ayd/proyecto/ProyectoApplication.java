@@ -355,10 +355,11 @@ public class ProyectoApplication {
     	usuarioRepository.save(usuario1);
 
 		Usuario usuario2 = new Usuario();
-    	usuario2.setNombre("José");
+    	usuario2.setNombre("Jose");
     	usuario2.setApellido("Sánchez");
     	usuario2.setEdad(45);
 		usuario2.setPassword("1234");
+		usuario2.setEmpleado(empleado2);
     	usuarioRepository.save(usuario2);
 
 		Usuario usuario3 = new Usuario();

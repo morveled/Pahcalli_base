@@ -7,6 +7,8 @@ import javax.swing.JFrame;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import mx.uam.ayd.proyecto.negocio.modelo.Empleado;
+import mx.uam.ayd.proyecto.negocio.modelo.TipoEmpleado;
 import mx.uam.ayd.proyecto.presentacion.gestionProductos.VentanaGestionProductos;
 
 @SuppressWarnings("serial")
@@ -152,5 +154,34 @@ public class VentanaMenu extends JFrame {
     public void muestra(ControlMenu control) {
         this.controlMenu = control;
         setVisible(true);
+    }
+
+    public void configurarVentana(Empleado empleado) {
+        String tipo = empleado.getTipo().getNombre();
+        jLabel1.setText("Bienvenid@ "+empleado.getNombre()+":"+tipo);
+        jButton3.setVisible(false);
+        jButton4.setVisible(false);
+        jButton5.setVisible(false);
+        jButton6.setVisible(false);
+        jButton7.setVisible(false);
+        jButton8.setVisible(false);
+
+        switch (tipo) {
+            case "Gerente":
+            jButton1.setVisible(true);
+            jButton3.setVisible(true);
+            jButton5.setVisible(true);
+            jButton7.setVisible(true);
+            break;
+            case "Cajero":
+            jButton1.setVisible(true);
+            break;
+            case "Almacenista":
+            jButton1.setVisible(false);
+            jButton5.setVisible(true);
+            jButton8.setVisible(true);
+            break;
+
+        }
     }
 }
