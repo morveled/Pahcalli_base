@@ -30,6 +30,8 @@ public class ControladorMostrarInventario {
         ventana.actualizarTabla(inventario);
         if(!tipoEmpleado.getNombre().equals("Gerente")) {
             ventana.desactivarSolicitud();
+        }else{
+            ventana.activarSolicitud();
         }
         ventana.muestra(this);
     }
