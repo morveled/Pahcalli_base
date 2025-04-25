@@ -1,8 +1,13 @@
 package mx.uam.ayd.proyecto.presentacion.menu;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JFrame;
+import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,174 +19,229 @@ import mx.uam.ayd.proyecto.presentacion.gestionProductos.VentanaGestionProductos
 @SuppressWarnings("serial")
 @Component
 public class VentanaMenu extends JFrame {
+    
+    // Definición de constantes de estilo según el estándar
+    private static final Font FONT_TITLE = new Font("Dialog", Font.BOLD, 20);
+    private static final Font FONT_SUBTITLE = new Font("Dialog", Font.BOLD, 14);
+    private static final Font FONT_LABEL = new Font("Dialog", Font.PLAIN, 12);
+    private static final Font FONT_BUTTON = new Font("Dialog", Font.BOLD, 12);
+    
+    private static final Color COLOR_PRIMARY = new Color(78, 154, 241); // #4e9af1
+    private static final Color COLOR_SECONDARY = new Color(240, 240, 240); // #f0f0f0
+    private static final Color COLOR_TEXT = new Color(51, 51, 51); // #333333
+    private static final Color COLOR_BACKGROUND = Color.WHITE;
+    private static final Color COLOR_PANEL = new Color(245, 245, 245); // #f5f5f5
+    private static final Color COLOR_TABLE_HEADER = new Color(233, 233, 233); // #e9e9e9
+    private static final Color COLOR_TABLE_SELECTED = new Color(208, 228, 255); // #d0e4ff
 
-    private JLabel jLabel1 = new JLabel();
-    private JLabel jLabel2 = new JLabel();
-    private JButton jButton1 = new JButton();
-    private JButton jButton2 = new JButton();
-    private JButton jButton3 = new JButton();
-    private JButton jButton4 = new JButton();
-    private JButton jButton5 = new JButton();
-    private JButton jButton6 = new JButton();
-    private JButton jButton7 = new JButton();
-    private JButton jButton8 = new JButton();
-    private JButton jButton9 = new JButton();
+    private JLabel titleLabel;
+    private JLabel welcomeLabel;
+    private JPanel buttonPanel;
+    
+    // Botones de menú
+    private JButton btnRealizarVenta;
+    private JButton btnInventarioFarmacias;
+    private JButton btnGestionUsuarios; 
+    private JButton btnGestionPromociones;
+    private JButton btnGestionInventario;
+    private JButton btnEstadisticas;
+    private JButton btnGestionProductos;
+    private JButton btnSolicitudesAbastecimiento;
+    private JButton btnCerrarSesion;
 
     private ControlMenu controlMenu;
 
     @Autowired
     private VentanaGestionProductos ventanaGestionProductos;
 
+    /**
+     * Constructor que inicializa los componentes
+     */
     public VentanaMenu() {
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jLabel1.setText("¡Bienvenid@!");
-        jLabel2.setText("Farmacia Pahcalli");
-
-        jButton1.setText("Realizar Venta");
-        jButton1.addActionListener(new java.awt.event.ActionListener(){
-            public void actionPerformed(java.awt.event.ActionEvent evt){
-                controlMenu.mostrarRealizarVenta();
-            }
-        });
-
-        jButton2.setText("Inventario de Farmacias");
-        jButton2.addActionListener(evt -> controlMenu.mostrarMostrarInventario());
-
-        jButton3.setText("Gestión De Usuarios");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                controlMenu.mostrarGestionUsuarios();
-            }
-        });
+        initComponents();
+    }
+    
+    /**
+     * Inicializa los componentes con el diseño estándar
+     */
+    private void initComponents() {
+        // Configuración básica de la ventana (punto 1)
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Menú Principal - Farmacia Pahcalli");
+        setSize(800, 500);
+        setLocationRelativeTo(null);
+        setBackground(COLOR_BACKGROUND);
         
-
-        jButton4.setText("Gestión De Promociones");
-
-        jButton5.setText("Gestión de Inventario");
-        jButton5.addActionListener(evt -> controlMenu.mostrarGestionInventario());
-
-        jButton6.setText("Estadísticas");
-
-        jButton7.setText("Gestión de Productos");
-        jButton7.addActionListener(evt -> jButton7ActionPerformed());
-
-        jButton8.setText("Solicitudes de Abastecimiento");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                controlMenu.mostrarSolicitudesAbastecimiento();
-            }
-        });
-
-        jButton9.setText("Cerrar Sesión");
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                controlMenu.cerrarSesion();
-            }
-        });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jButton6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
-                                .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(93, 93, 93))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 131, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(106, 106, 106))))
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton9)
-                    .addGap(36, 36, 36))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(153, 153, 153)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(jButton2)
-                            .addGap(30, 30, 30)
-                            .addComponent(jButton3)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                    .addComponent(jButton4)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton5))
-                    .addGap(7, 7, 7)
-                    .addComponent(jButton6)
-                    .addGap(35, 35, 35)
-                    .addComponent(jButton7)
-                    .addGap(18, 18, 18)
-                    .addComponent(jButton8)
-                    .addGap(18, 18, 18)
-                    .addComponent(jButton9)
-                    .addGap(18, 18, 18))
-        );
-
-        pack();
+        // Panel principal con márgenes estándar (punto 1)
+        JPanel contentPane = new JPanel();
+        contentPane.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        contentPane.setBackground(COLOR_BACKGROUND);
+        contentPane.setLayout(new BorderLayout(10, 10));
+        setContentPane(contentPane);
+        
+        // Panel de título (punto 2)
+        JPanel titlePanel = new JPanel(new BorderLayout());
+        titlePanel.setBackground(COLOR_BACKGROUND);
+        titlePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+        contentPane.add(titlePanel, BorderLayout.NORTH);
+        
+        // Título de la farmacia (punto 2)
+        titleLabel = new JLabel("Farmacia Pahcalli");
+        titleLabel.setFont(FONT_TITLE);
+        titleLabel.setForeground(COLOR_TEXT);
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titlePanel.add(titleLabel, BorderLayout.CENTER);
+        
+        // Etiqueta de bienvenida (punto 2)
+        welcomeLabel = new JLabel("¡Bienvenid@!");
+        welcomeLabel.setFont(FONT_SUBTITLE);
+        welcomeLabel.setForeground(COLOR_TEXT);
+        welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titlePanel.add(welcomeLabel, BorderLayout.SOUTH);
+        
+        // Panel central para los botones del menú (punto 3)
+        buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(0, 1, 0, 10)); // Una columna con 10px de espacio vertical
+        buttonPanel.setBackground(COLOR_BACKGROUND);
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 50, 0, 50));
+        contentPane.add(buttonPanel, BorderLayout.CENTER);
+        
+        // Crear y añadir los botones al panel
+        btnRealizarVenta = createMenuButton("Realizar Venta", e -> controlMenu.mostrarRealizarVenta());
+        btnInventarioFarmacias = createMenuButton("Inventario de Farmacias", e -> controlMenu.mostrarMostrarInventario());
+        btnGestionUsuarios = createMenuButton("Gestión de Usuarios", e -> controlMenu.mostrarGestionUsuarios());
+        btnGestionPromociones = createMenuButton("Gestión de Promociones", null);
+        btnGestionInventario = createMenuButton("Gestión de Inventario", e -> controlMenu.mostrarGestionInventario());
+        btnEstadisticas = createMenuButton("Estadísticas", null);
+        btnGestionProductos = createMenuButton("Gestión de Productos", e -> jButton7ActionPerformed());
+        btnSolicitudesAbastecimiento = createMenuButton("Solicitudes de Abastecimiento", 
+                e -> controlMenu.mostrarSolicitudesAbastecimiento());
+        
+        // Añadir los botones al panel en orden
+        buttonPanel.add(btnRealizarVenta);
+        buttonPanel.add(btnInventarioFarmacias);
+        buttonPanel.add(btnGestionUsuarios);
+        buttonPanel.add(btnGestionPromociones);
+        buttonPanel.add(btnGestionInventario);
+        buttonPanel.add(btnEstadisticas);
+        buttonPanel.add(btnGestionProductos);
+        buttonPanel.add(btnSolicitudesAbastecimiento);
+        
+        // Panel inferior para el botón de cerrar sesión (punto 3)
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        bottomPanel.setBackground(COLOR_BACKGROUND);
+        contentPane.add(bottomPanel, BorderLayout.SOUTH);
+        
+        // Botón de cerrar sesión
+        btnCerrarSesion = createMenuButton("Cerrar Sesión", e -> controlMenu.cerrarSesion());
+        btnCerrarSesion.setPreferredSize(new Dimension(150, 30));
+        bottomPanel.add(btnCerrarSesion);
     }
 
+    /**
+     * Método para crear botones del menú con estilo estándar (punto 3)
+     * 
+     * @param text Texto del botón
+     * @param listener ActionListener para el botón (puede ser null)
+     * @return Botón configurado con el estilo estándar
+     */
+    private JButton createMenuButton(String text, ActionListener listener) {
+        JButton button = new JButton(text);
+        button.setFont(FONT_BUTTON);
+        button.setBackground(COLOR_PRIMARY);
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setPreferredSize(new Dimension(200, 40));
+        
+        if (listener != null) {
+            button.addActionListener(listener);
+        }
+        
+        return button;
+    }
+    
+    /**
+     * Muestra un diálogo de error con formato estándar (punto 6)
+     * @param mensaje Mensaje a mostrar al usuario
+     */
+    private void muestraDialogoError(String mensaje) {
+        // Configuración estándar para diálogos de error (punto 6)
+        UIManager.put("OptionPane.messageFont", FONT_LABEL);
+        UIManager.put("OptionPane.buttonFont", FONT_BUTTON);
+        UIManager.put("OptionPane.background", COLOR_BACKGROUND);
+        UIManager.put("Panel.background", COLOR_BACKGROUND);
+        UIManager.put("OptionPane.errorIcon", UIManager.getIcon("OptionPane.errorIcon"));
+        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    /**
+     * Muestra un diálogo de éxito con formato estándar (punto 6)
+     * @param mensaje Mensaje a mostrar al usuario
+     */
+    private void muestraDialogoExito(String mensaje) {
+        // Configuración estándar para diálogos de información (punto 6)
+        UIManager.put("OptionPane.messageFont", FONT_LABEL);
+        UIManager.put("OptionPane.buttonFont", FONT_BUTTON);
+        UIManager.put("OptionPane.background", COLOR_BACKGROUND);
+        UIManager.put("Panel.background", COLOR_BACKGROUND);
+        UIManager.put("OptionPane.informationIcon", UIManager.getIcon("OptionPane.informationIcon"));
+        JOptionPane.showMessageDialog(this, mensaje, "Éxito", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    /**
+     * Abre la ventana de gestión de productos
+     */
     private void jButton7ActionPerformed() {
         ventanaGestionProductos.muestra(); 
     }
 
+    /**
+     * Hace visible la ventana y establece el controlador
+     * 
+     * @param control Controlador del menú
+     */
     public void muestra(ControlMenu control) {
         this.controlMenu = control;
         setVisible(true);
     }
 
+    /**
+     * Configura la ventana según el tipo de empleado que inicia sesión
+     * 
+     * @param empleado Empleado que inicia sesión
+     */
     public void configurarVentana(Empleado empleado) {
+        // Personalizar mensaje de bienvenida
         String tipo = empleado.getTipo().getNombre();
-        jLabel1.setText("Bienvenid@ "+empleado.getNombre()+":"+tipo);
-        jButton3.setVisible(false);
-        jButton4.setVisible(false);
-        jButton5.setVisible(false);
-        jButton6.setVisible(false);
-        jButton7.setVisible(false);
-        jButton8.setVisible(false);
+        welcomeLabel.setText("Bienvenid@ " + empleado.getNombre() + ": " + tipo);
+        
+        // Ocultar todos los botones primero
+        btnGestionUsuarios.setVisible(false);
+        btnGestionPromociones.setVisible(false);
+        btnGestionInventario.setVisible(false);
+        btnEstadisticas.setVisible(false);
+        btnGestionProductos.setVisible(false);
+        btnSolicitudesAbastecimiento.setVisible(false);
+        btnRealizarVenta.setVisible(false);
+        btnInventarioFarmacias.setVisible(true); // Este se mantiene visible para todos
 
+        // Configurar visibilidad de botones según el tipo de empleado
         switch (tipo) {
             case "Gerente":
-            jButton1.setVisible(true);
-            jButton3.setVisible(true);
-            jButton5.setVisible(true);
-            jButton7.setVisible(true);
-            break;
+                btnRealizarVenta.setVisible(true);
+                btnGestionUsuarios.setVisible(true);
+                btnGestionInventario.setVisible(true);
+                btnGestionProductos.setVisible(true);
+                break;
             case "Cajero":
-            jButton1.setVisible(true);
-            break;
+                btnRealizarVenta.setVisible(true);
+                break;
             case "Almacenista":
-            jButton1.setVisible(false);
-            jButton5.setVisible(true);
-            jButton8.setVisible(true);
-            break;
-
+                btnRealizarVenta.setVisible(false);
+                btnGestionInventario.setVisible(true);
+                btnSolicitudesAbastecimiento.setVisible(true);
+                break;
         }
     }
 }
