@@ -1,7 +1,14 @@
 package mx.uam.ayd.proyecto.presentacion.loggin;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import org.springframework.stereotype.Component;
 
@@ -9,17 +16,28 @@ import org.springframework.stereotype.Component;
 
 @SuppressWarnings("serial")
 @Component
-public class VentanaLoggin extends JFrame {
+public class VentanaLoggin extends JFrame {    
+    // Definición de constantes de estilo según el estándar
+    private static final Font FONT_TITLE = new Font("Dialog", Font.BOLD, 20);
+    private static final Font FONT_SUBTITLE = new Font("Dialog", Font.BOLD, 14);
+    private static final Font FONT_LABEL = new Font("Dialog", Font.PLAIN, 12);
+    private static final Font FONT_BUTTON = new Font("Dialog", Font.BOLD, 12);
+    
+    private static final Color COLOR_PRIMARY = new Color(78, 154, 241); // #4e9af1
+    private static final Color COLOR_SECONDARY = new Color(240, 240, 240); // #f0f0f0
+    private static final Color COLOR_TEXT = new Color(51, 51, 51); // #333333
+    private static final Color COLOR_BACKGROUND = Color.WHITE;
+    private static final Color COLOR_PANEL = new Color(245, 245, 245); // #f5f5f5
 
-    private javax.swing.JButton jButton1;
-    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JButton btnEntrar;
+    private javax.swing.JCheckBox chkRecuerdame;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JDialog jDialog2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    private javax.swing.JLabel lblUsuario;
+    private javax.swing.JLabel lblContraseña;
+    private javax.swing.JLabel lblTitulo;
+    private javax.swing.JTextField txtUsuario;
+    private javax.swing.JTextField txtContraseña;
 
     private ControlLoggin controlLoggin;
     /**
@@ -38,143 +56,157 @@ public class VentanaLoggin extends JFrame {
     //@SuppressWarnings("unchecked") //Esta cosa impedia la inyeccion de dependecia con Autowired, en teoria todo esto deberia ir dentro del contructor
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
+        // Configuración básica de la ventana (punto 1)
+        setTitle("Acceso al Sistema");
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setSize(350, 400); // Tamaño especial para ventana de login (punto 1)
+        setLocationRelativeTo(null);
+        setBackground(COLOR_BACKGROUND);
+        setLayout(new BorderLayout());
+        
+        // Panel principal con margen interior
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        mainPanel.setBackground(COLOR_BACKGROUND);
+        
+        // Componentes del diálogo
         jDialog1 = new javax.swing.JDialog();
         jDialog2 = new javax.swing.JDialog();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JPasswordField();
-        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+        
+        // Panel de título en la parte superior
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        titlePanel.setBackground(COLOR_BACKGROUND);
+        
+        lblTitulo = new javax.swing.JLabel("Ingresar al Sistema");
+        lblTitulo.setFont(FONT_TITLE);
+        lblTitulo.setForeground(COLOR_TEXT);
+        lblTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        titlePanel.add(lblTitulo);
+        
+        // Panel de formulario en el centro
+        JPanel formPanel = new JPanel(new java.awt.GridBagLayout());
+        formPanel.setBackground(COLOR_BACKGROUND);
+        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+        gbc.insets = new java.awt.Insets(8, 10, 8, 10);
+        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        
+        // Etiqueta usuario
+        lblUsuario = new javax.swing.JLabel("Usuario");
+        lblUsuario.setFont(FONT_LABEL);
+        lblUsuario.setForeground(COLOR_TEXT);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        formPanel.add(lblUsuario, gbc);
+        
+        // Campo usuario
+        txtUsuario = new javax.swing.JTextField();
+        txtUsuario.setFont(FONT_LABEL);
+        txtUsuario.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)),
+            javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        formPanel.add(txtUsuario, gbc);
+        
+        // Etiqueta contraseña
+        lblContraseña = new javax.swing.JLabel("Contraseña");
+        lblContraseña.setFont(FONT_LABEL);
+        lblContraseña.setForeground(COLOR_TEXT);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.insets = new java.awt.Insets(15, 10, 8, 10); // Espacio vertical adicional
+        formPanel.add(lblContraseña, gbc);
+        
+        // Campo contraseña
+        txtContraseña = new javax.swing.JPasswordField();
+        txtContraseña.setFont(FONT_LABEL);
+        txtContraseña.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)),
+            javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        txtContraseña.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jButton1 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-
-        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
-        jDialog1.getContentPane().setLayout(jDialog1Layout);
-        jDialog1Layout.setHorizontalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        jDialog1Layout.setVerticalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout jDialog2Layout = new javax.swing.GroupLayout(jDialog2.getContentPane());
-        jDialog2.getContentPane().setLayout(jDialog2Layout);
-        jDialog2Layout.setHorizontalGroup(
-            jDialog2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        jDialog2Layout.setVerticalGroup(
-            jDialog2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jTextField4.setText("");
-        jTextField4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        jTextField5.setText("");
-        jTextField5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        jCheckBox1.setText("Recuerdame ");
-
-        jButton1.setText("Entrar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.insets = new java.awt.Insets(8, 10, 8, 10);
+        formPanel.add(txtContraseña, gbc);
+        
+        // Checkbox recuerdame
+        chkRecuerdame = new javax.swing.JCheckBox("Recuérdame");
+        chkRecuerdame.setFont(FONT_LABEL);
+        chkRecuerdame.setForeground(COLOR_TEXT);
+        chkRecuerdame.setBackground(COLOR_BACKGROUND);
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.insets = new java.awt.Insets(15, 10, 15, 10); // Espacio vertical adicional
+        formPanel.add(chkRecuerdame, gbc);
+        
+        // Panel de botones en la parte inferior
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        buttonPanel.setBackground(COLOR_BACKGROUND);
+        
+        // Botón entrar
+        btnEntrar = new javax.swing.JButton("Entrar");
+        btnEntrar.setFont(FONT_BUTTON);
+        btnEntrar.setBackground(COLOR_PRIMARY);
+        btnEntrar.setForeground(Color.WHITE);
+        btnEntrar.setPreferredSize(new Dimension(120, 30));
+        btnEntrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+        buttonPanel.add(btnEntrar);
 
-        jLabel1.setText("Usuario");
-
-        jLabel2.setText("Contraseña");
-
-        jLabel3.setText("Ingresar al Sistema");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(94, 94, 94)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jCheckBox1)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jButton1)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel1)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel3))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(56, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(53, 53, 53)
-                .addComponent(jLabel3)
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(36, 36, 36)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(36, 36, 36)
-                .addComponent(jCheckBox1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(26, 26, 26))
-        );
-
-        pack();
+        // Agregar los paneles al panel principal
+        mainPanel.add(titlePanel, BorderLayout.NORTH);
+        mainPanel.add(formPanel, BorderLayout.CENTER);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+        
+        // Agregar el panel principal a la ventana
+        add(mainPanel);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    //Menu nuevaVentana = new Menu();
-    // 2. Mostrar la nueva ventana
-    //nuevaVentana.setVisible(true);
-
-        controlLoggin.login(jTextField4.getText(), jTextField5.getText());
-        /*
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-             new VentanaMenu().setVisible(true);
-            }
-        });
-        */
-
+        // Validar campos
+        if (txtUsuario.getText().isEmpty() || txtContraseña.getText().isEmpty()) {
+            // Diálogo de error estándar (punto 6)
+            JOptionPane.showMessageDialog(this, 
+                "Por favor complete todos los campos", 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         
-	}
-
-	public void muestra(ControlLoggin control) {
-        this.controlLoggin = control;
-        limpiarCampos();
-		setVisible(true);
-	}
-
-    public void muestraDialogoConMensaje(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje);
+        // Llamar al controlador para realizar el login
+        controlLoggin.login(txtUsuario.getText(), txtContraseña.getText());
     }
 
+    public void muestra(ControlLoggin control) {
+        this.controlLoggin = control;
+        limpiarCampos();
+        setVisible(true);
+    }
+
+    /**
+     * Muestra un diálogo con mensaje según el estándar (punto 6)
+     * @param mensaje El mensaje a mostrar
+     */
+    public void muestraDialogoConMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, 
+            mensaje, 
+            "Información", 
+            JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     * Limpia los campos del formulario
+     */
     public void limpiarCampos() {
-        jTextField4.setText("");
-        jTextField5.setText("");
-        jCheckBox1.setSelected(false);
+        txtUsuario.setText("");
+        txtContraseña.setText("");
+        chkRecuerdame.setSelected(false);
     }
 } 

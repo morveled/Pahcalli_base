@@ -70,6 +70,10 @@ public class VentanaMostrarInventario extends javax.swing.JFrame {
     public void desactivarSolicitud() {
         botonSolicitarReabastecimiento.setEnabled(false);
     }
+
+    public void activarSolicitud() {
+        botonSolicitarReabastecimiento.setEnabled(true);
+    }
     
     // Componentes de la interfaz
     private JTable tablaInventario;
